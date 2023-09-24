@@ -29,3 +29,5 @@ CREATE TABLE `visit_history` (
   `updated_at` BIGINT NOT NULL,
   INDEX `tenant_id_idx` (`tenant_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8mb4;
+
+CREATE INDEX idx_visit_history_id_idx ON visit_history ( `player_id` , `tenant_id` , `competition_id` , `created_at` , `updated_at` );
