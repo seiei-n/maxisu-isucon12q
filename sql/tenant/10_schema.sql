@@ -31,5 +31,3 @@ CREATE TABLE player_score (
   updated_at BIGINT NOT NULL
 );
 
-
-
