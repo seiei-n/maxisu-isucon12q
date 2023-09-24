@@ -12,6 +12,7 @@ sudo cp ./origin/nginx.conf.bak /etc/nginx/nginx.conf
 elif [ "$1" = "logs" ]; then
 echo "Switching to logs configs..."
 sudo cp ./nginx.conf.log /etc/nginx/nginx.conf
+sudo rm /var/log/nginx/access.log
 #sudo cp ./my.cnf.log /etc/mysql/conf.d/my.cnf
 else
 echo "Usage: ./switchConfigs.sh <config>"
