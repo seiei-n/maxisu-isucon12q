@@ -1,1 +1,0 @@
-CREATE INDEX visit_history_id_idx ON visit_history ( `competition_id` , `created_at` , `tenant_id` )
