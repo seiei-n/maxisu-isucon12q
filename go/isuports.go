@@ -1595,6 +1595,13 @@ func initializeHandler(c echo.Context) error {
 	if err != nil {
 		return fmt.Errorf("error exec.Command: %s %e", string(out), err)
 	}
+	// sqliteのPlayerScoreRowのそれぞれにindexを張る
+	indexScript := fmt.Sprintf("CREATE INDEX IF NOT EXISTS player_score_tenant_id_competition_id_player_id ON player_score (tenant_id, competition_id, player_id);")
+	out, err = exec.Command(indexScript).CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("error exec.Command: %s %e", string(out), err)
+	}
+	
 	res := InitializeHandlerResult{
 		Lang: "go",
 	}
