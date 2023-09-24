@@ -27,6 +27,7 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwa"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/lestrrat-go/jwx/v2/jwt"
+	"github.com/rs/xid"
 
 )
 
@@ -99,13 +100,9 @@ func createTenantDB(id int64) error {
 }
 
 // システム全体で一意なIDを生成する
-func dispenseID(ctx context.Context) (string, error) {
-	var id string
-	// とりあえずUUIDv4で
-	if err := adminDB.GetContext(ctx, &id, "SELECT UUID()"); err != nil {
-		return "", fmt.Errorf("error Select UUID: %w", err)
-	}
-	return id, nil
+func dispenseID(ctx context.Context) (string) {
+	id := xid.New().String()
+	return id
 }
 
 // 全APIにCache-Control: privateを設定する
