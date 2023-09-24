@@ -96,7 +96,7 @@ func createTenantDB(id int64) error {
 	if out, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("failed to exec sqlite3 %s < %s, out=%s: %w", p, tenantDBSchemaFilePath, string(out), err)
 	}
-	indexScript := fmt.Sprintf("ALTER TABLE player_score ADD INDEX player_score_idx (tenant_id, competition_id, score, player_id);")
+	indexScript := fmt.Sprintf("CREATE INDEX player_score_tenant_id_competition_id_player_id ON player_score (tenant_id, competition_id, player_id); CREATE INDEX player ON player (tenant_id, id); CREATE INDEX competition ON competition (tenant_id, id);")
 	cmd = exec.Command("sh", "-c", fmt.Sprintf("sqlite3 %s \"%s\"", p, indexScript))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("failed to exec sqlite3 %s \"%s\", out=%s: %w", p, indexScript, string(out), err)
