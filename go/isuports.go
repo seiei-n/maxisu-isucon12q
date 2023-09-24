@@ -85,11 +85,6 @@ func connectToTenantDB(id int64) (*sqlx.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open tenant DB: %w", err)
 	}
-    indexScript := fmt.Sprintf("CREATE INDEX IF NOT EXISTS player_score_tenant_id_competition_id_player_id ON player_score (tenant_id, competition_id, player_id);")
-	_, err = db.Exec(indexScript)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create index: %w", err)
-	}
 	return db, nil
 }
 
@@ -100,6 +95,11 @@ func createTenantDB(id int64) error {
 	cmd := exec.Command("sh", "-c", fmt.Sprintf("sqlite3 %s < %s", p, tenantDBSchemaFilePath))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("failed to exec sqlite3 %s < %s, out=%s: %w", p, tenantDBSchemaFilePath, string(out), err)
+	}
+	indexScript := fmt.Sprintf("CREATE INDEX IF NOT EXISTS player_score_tenant_id_competition_id_player_id ON player_score (tenant_id, competition_id, player_id);")
+	cmd = exec.Command("sh", "-c", fmt.Sprintf("sqlite3 %s \"%s\"", p, indexScript))
+	if out, err := cmd.CombinedOutput(); err != nil {
+		return fmt.Errorf("failed to exec sqlite3 %s \"%s\", out=%s: %w", p, indexScript, string(out), err)
 	}
 	return nil
 }
